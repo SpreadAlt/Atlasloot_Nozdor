@@ -54,6 +54,7 @@ jobs:
             [$commits[].message
               | gsub("\r\n"; "\n")
               | gsub("\r"; "\n")
+              | (split("\n") | map(select(. != "")) | join("\n"))
               | gsub("\n+$"; "")
               | select(. != "")
             ] | join("\n")))}
@@ -102,6 +103,7 @@ jobs:
             {content: ($repo + "\n" + ([$commits[].message
               | gsub("\r\n"; "\n")
               | gsub("\r"; "\n")
+              | (split("\n") | map(select(. != "")) | join("\n"))
               | gsub("\n+$"; "")
               | select(. != "")
             ] | join("\n")) + "\n\n" + "Архив: " + $url)}
