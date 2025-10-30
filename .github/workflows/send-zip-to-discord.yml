@@ -52,7 +52,9 @@ jobs:
           PAYLOAD=$(jq -n --arg repo "$REPO_NAME" --argjson commits "$COMMITS_JSON" '
             {content: ($repo + "\n" + (
             [$commits[].message
-              | gsub("[\\r\\n]+$"; "")
+              | gsub("\r\n"; "\n")
+              | gsub("\r"; "\n")
+              | gsub("\n+$"; "")
               | select(. != "")
             ] | join("\n")))}
           ')
@@ -98,7 +100,9 @@ jobs:
 
           PAYLOAD=$(jq -n --arg repo "$REPO_NAME" --argjson commits "$COMMITS_JSON" --arg url "$REL_URL" '
             {content: ($repo + "\n" + ([$commits[].message
-              | gsub("[\\r\\n]+$"; "")
+              | gsub("\r\n"; "\n")
+              | gsub("\r"; "\n")
+              | gsub("\n+$"; "")
               | select(. != "")
             ] | join("\n")) + "\n\n" + "Архив: " + $url)}
           ')
