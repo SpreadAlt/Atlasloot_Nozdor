@@ -50,7 +50,7 @@ jobs:
           REPO_NAME='${{ github.event.repository.name }}'
           COMMITS_JSON='${{ toJson(github.event.commits) }}'
           PAYLOAD=$(jq -n --arg repo "$REPO_NAME" --argjson commits "$COMMITS_JSON" '
-            {content: ($repo + "\n" + ([$commits[].message] | join("\n")))}
+            {content: ($repo + "\n" + ([$commits[].message | gsub("\\r?\\n$"; "")] | join("\n")))}
           ')
 
           curl -s -X POST \
