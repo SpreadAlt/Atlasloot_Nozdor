@@ -93,7 +93,7 @@ jobs:
           REL_URL="https://github.com/${GITHUB_REPOSITORY}/releases/tag/${REL_TAG}"
 
           PAYLOAD=$(jq -n --arg repo "$REPO_NAME" --argjson commits "$COMMITS_JSON" --arg url "$REL_URL" '
-            {content: ($repo + "\n" + ([$commits[].message] | join("\n")) + "\n\n" + "Архив: " + $url)}
+            {content: ($repo + "\n" + ([$commits[].message | gsub("\\r?\\n$"; "")] | join("\n")) + "\n\n" + "Архив: " + $url)}
           ')
 
           curl -s -H "Content-Type: application/json" \
